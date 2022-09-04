@@ -13,6 +13,7 @@ java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
 	mavenCentral()
+	mavenLocal()
 }
 
 dependencies {
@@ -21,12 +22,16 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+	implementation("net.sf.sociaal:freetts:1.2.2")
+	implementation("com.itextpdf:itextpdf:5.0.6")
+	implementation("net.sourceforge.lame:lame:3.98.4")
 }
 
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = "17"
+		jvmTarget = "11"
 	}
 }
 

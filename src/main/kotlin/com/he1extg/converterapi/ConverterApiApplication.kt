@@ -1,4 +1,4 @@
-package com.he1extg.ConverterAPI
+package com.he1extg.converterapi
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
