@@ -1,5 +1,7 @@
 package com.he1extg.converterapi.converter
 
+import com.he1extg.converterapi.converter.pdf.PDFReader
+import com.he1extg.converterapi.converter.tts.TTS
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.io.InputStream

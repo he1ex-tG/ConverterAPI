@@ -33,12 +33,12 @@ class ConverterController {
         ).build()
         val textApiUriStr = textApiUri.scheme + "://" + textApiUri.host + ":" + textApiUri.port + textApiUri.path
         return """
-            <div>Server datetime: ${LocalDateTime.now()}</div>
-            <div>"Converter: PDF to MP3" - API</div>
+            <p>Server datetime: ${LocalDateTime.now()}</p>
+            <p>"Converter: PDF to MP3" - API</p>
             <p></p>
             <div>Endpoints:</div>
             <div>1. URI - <a href=$fileApiUriStr>$fileApiUriStr</a></div>
-            <div>Request: Method - POST; Content type - multipart/form-data; Body param - file: MultipartFile (must be a pdf file)</div>
+            <div>Request: Method - POST; Content type - multipart/form-data; Body param - file: MultipartFile (only pdf)</div>
             <div>Response: Content type - application/json; Return type - ByteArrayResource (mp3 byte array resource)</div>
             <div>2. URI - <a href=$textApiUriStr>$textApiUriStr</a></div>
             <div>Request: Method - POST; Content type - multipart/form-data; ; Body param - text: ByteArray (any text performed as byte array)</div>
@@ -49,7 +49,11 @@ class ConverterController {
     @PostMapping("/file")
     fun convertFile(@RequestParam file: MultipartFile): ResponseEntity<Resource> {
         if (!file.isEmpty) {
-            val newFileName = file.originalFilename!!.split(".").first() + ".mp3"
+            val newFileName = if (file.originalFilename != null) {
+                file.originalFilename!!.substring(0, file.originalFilename!!.lastIndexOf(".")) + ".mp3"
+            } else {
+                "temp.mp3"
+            }
             val converted = converter.convert(file.inputStream)
             val resource : Resource = object : ByteArrayResource(converted.readBytes()) {
                 override fun getFilename(): String = newFileName

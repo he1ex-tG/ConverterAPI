@@ -24,7 +24,7 @@ internal class ConverterControllerTest {
             .contentType(MediaType.MULTIPART_FORM_DATA)
             .body(
                 LinkedMultiValueMap<String, Any>().apply {
-                    add("file", FileSystemResource("C:/test.pdf"))
+                    add("file", FileSystemResource("E:/test.pdf"))
                 }
             )
 
@@ -43,7 +43,7 @@ internal class ConverterControllerTest {
             .contentType(MediaType.MULTIPART_FORM_DATA)
             .body(
                 LinkedMultiValueMap<String, Any>().apply {
-                    add("text", "Some text")
+                    add("text", "Hello World!")
                 }
             )
 

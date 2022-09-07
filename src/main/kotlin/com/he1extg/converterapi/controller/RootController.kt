@@ -14,9 +14,9 @@ class RootController {
             ConverterController::class.java
         ).toUriString()
         return """
-            <div>Server datetime: ${LocalDateTime.now()}</div>
-            <div>"Converter: PDF to MP3" - API</div>
-            <div>Get link: <a href=$apiUri>$apiUri</a> to more details</div>
+            <p>Server datetime: ${LocalDateTime.now()}</p>
+            <p>"Converter: PDF to MP3" - API</p>
+            <p>Get link: <a href=$apiUri>$apiUri</a> for more details</p>
         """.trimIndent()
     }
 }

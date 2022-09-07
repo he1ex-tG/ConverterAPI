@@ -1,4 +1,4 @@
-package com.he1extg.converterapi.converter
+package com.he1extg.converterapi.converter.pdf
 
 import com.itextpdf.text.pdf.PdfReader
 import com.itextpdf.text.pdf.parser.PdfTextExtractor

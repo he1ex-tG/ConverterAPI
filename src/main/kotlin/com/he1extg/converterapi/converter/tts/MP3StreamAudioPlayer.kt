@@ -1,4 +1,4 @@
-package com.he1extg.converterapi.converter
+package com.he1extg.converterapi.converter.tts
 
 import com.sun.speech.freetts.audio.AudioPlayer
 import net.sourceforge.lame.lowlevel.LameEncoder
