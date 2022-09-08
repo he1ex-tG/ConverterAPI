@@ -58,7 +58,7 @@ The project is built after the dependency issues are resolved. For example:
 
 
 
-    # .gradlew bootJar
+    # ./gradlew bootJar
 
 2) Manually run build task `bootJar` from IDE. 
 
