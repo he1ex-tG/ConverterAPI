@@ -12,19 +12,21 @@ This is the part of [PDFReader](https://github.com/he1ex-tG/PDFReader) project.
 
 ## Structure
 
-This module provides an [API](#1-api) for [converting](#2-converter) PDF files or plain text to audio format.
+This module provides an [API](#1-api) for [converting](#2-converter) PDF files 
+or plain text to audio format.
 
 ### 1. API
 
-The API is built using the features provided by [Spring Boot](https://spring.io/projects/spring-boot).
-It provides some endpoints that can be used by third party services:
+The API is built using the features provided by 
+[Spring Boot](https://spring.io/projects/spring-boot). It provides some 
+endpoints that can be used by third party services:
 
-| __Method__ | __Endpoint__ | __Description__                                                                                    |
-|------------|--------------|----------------------------------------------------------------------------------------------------|
-| GET        | /            | Get info                                                                                           |
-| GET        | /api/v1      | Get API info (e.g. request method, content type, incoming data format and response returning type) |
-| POST       | /api/v1/file | Convert pdf (only) file to mp3 byte array resource                                                 |
-| POST       | /api/v1/text | Convert any text performed as byte array to mp3 byte array                                         |
+| __Method__ | __Endpoint__ | __Description__                                                                                               |
+|------------|--------------|---------------------------------------------------------------------------------------------------------------|
+| GET        | /            | Get info                                                                                                      |
+| GET        | /api/v1      | Get API info (e.g. request method, content type, incoming data format and data type that returns in response) |
+| POST       | /api/v1/file | Convert pdf (only) file to mp3 byte array resource                                                            |
+| POST       | /api/v1/text | Convert any text performed as byte array to mp3 byte array                                                    |
 
 ### 2. Converter
 
@@ -41,7 +43,8 @@ audio data to a file, as well as to hot convert from WAV to MP3 using
 
 ### 3. Tests
 
-Functional tests of both the API and the converter are located in `/src/test` directory.
+Functional tests of both the API and the converter are located in `/src/test` 
+directory.
 
 ## Build Instructions
 
@@ -59,20 +62,24 @@ The project is built after the dependency issues are resolved. For example:
 
 2) Manually run build task `bootJar` from IDE. 
 
-The compiled Jar is in `/build/libs/ConverterAPI-[version]-SNAPSHOT.jar`.
+The compiled Jar is in `./build/libs/ConverterAPI-[version]-SNAPSHOT.jar`.
 
 ## Usage
 
 Here:
-- [host] is the host where the project is running, [host] = `localhost` by default.
-- [port] is the port. It can be changed in the `application.yaml` settings file. [port] = `8080` by default.
+- [host] is the host where the project is running, [host] = `localhost` by 
+default.
+- [port] is the port. It can be changed in the `application.yaml` settings 
+file. [port] = `8080` by default.
 
 Files conversion:
+
 
 
     # curl -F file=@C:/hw.pdf -o C:/hw.mp3 http://[host]:[port]/api/v1/file
 
 Text conversion:
+
 
 
     # curl -d "text=Hello world!" -o C:/hw.mp3 http://[host]:[port]/api/v1/text
