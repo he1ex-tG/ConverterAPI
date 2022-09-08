@@ -43,7 +43,7 @@ audio data to a file, as well as to hot convert from WAV to MP3 using
 
 ### 3. Tests
 
-Functional tests of both the API and the converter are located in `/src/test` 
+Functional tests of both the API and the converter are located in `./src/test` 
 directory.
 
 ## Build Instructions
