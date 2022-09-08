@@ -1,8 +1,8 @@
 # "Converter: PDF to MP3" - API
 
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/he1ex-tG/ConverterAPI?logo=GitHub) ![GitHub last commit](https://img.shields.io/github/last-commit/he1ex-tG/ConverterAPI?logo=GitHub) ![GitHub issues](https://img.shields.io/github/issues/he1ex-tG/ConverterAPI?logo=GitHub) ![GitHub pull requests](https://img.shields.io/github/issues-pr/he1ex-tG/ConverterAPI?logo=GitHub) ![GitHub](https://img.shields.io/github/license/he1ex-tG/ConverterAPI?logo=GitHub)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/he1ex-tG/ConverterAPI?logo=GitHub) ![GitHub last commit](https://img.shields.io/github/last-commit/he1ex-tG/ConverterAPI?logo=GitHub) ![GitHub issues](https://img.shields.io/github/issues/he1ex-tG/ConverterAPI?logo=GitHub) ![GitHub pull requests](https://img.shields.io/github/issues-pr/he1ex-tG/ConverterAPI?logo=GitHub) ![GitHub](https://img.shields.io/github/license/he1ex-tg/converterapi?logo=GitHub)
 
-This is an educational project aimed at gaining practical experience in
+This is a study project aimed at gaining practical experience at
 working with the Spring Framework, designing and developing multi-component
 systems.
 
@@ -28,30 +28,31 @@ It provides some endpoints that can be used by third party services:
 
 ### 2. Converter
 
-Converting a PDF file into text (array of bytes) is done using the
-[ITextPDF](https://itextpdf.com/) library. Then the text is converted to audio -
-the [FreeTTS](https://freetts.sourceforge.io/) library is used for this.
+Converting a PDF file into text (array of bytes) is made using the
+[ITextPDF](https://itextpdf.com/) library. Then the text is converted by 
+the [FreeTTS](https://freetts.sourceforge.io/) library.
 
-> __Note__. By default, FreeTTS does not provide the ability
+> __Note__. By default, FreeTTS does not provide the ability to
 output the audio stream as a `ByteArrayInputStream` or `ByteArray`, for example.
-Therefore, I made my own implementation of the `AudioPlayer` interface.
-This approach made it possible to abandon the use of intermediate saving of
+So, I made my own implementation of the `AudioPlayer` interface.
+This approach made it possible to avoid intermediate saving of
 audio data to a file, as well as to hot convert from WAV to MP3 using
 [Lame](https://lame.sourceforge.io/).
 
 ### 3. Tests
 
-Tests that check the correct operation of both the API and the converter are located in `/src/test` directory.
+Functional tests of both the API and the converter are located in `/src/test` directory.
 
 ## Build Instructions
 
-To successfully build the project, you must first compile Lame yourself. After 
+To successfully build the project, you should first compile Lame yourself. After 
 compilation, it will be placed in the Maven local repository (included in the 
 `repositories` section in the `build.gradle.kts` file). Compilation instructions 
 and source codes can be found on the [Lame](https://lame.sourceforge.io/) website.
 
 The project is built after the dependency issues are resolved. For example:
 1) From command line (in project root directory)
+
 
 
     # .gradlew bootJar
@@ -68,9 +69,11 @@ Here:
 
 Files conversion:
 
+
     # curl -F file=@C:/hw.pdf -o C:/hw.mp3 http://[host]:[port]/api/v1/file
 
 Text conversion:
+
 
     # curl -d "text=Hello world!" -o C:/hw.mp3 http://[host]:[port]/api/v1/text
 
