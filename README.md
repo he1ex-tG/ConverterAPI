@@ -37,7 +37,7 @@ the [FreeTTS](https://freetts.sourceforge.io/) library.
 > __Note__. By default, FreeTTS does not provide the ability to
 output the audio stream as a `ByteArrayInputStream` or `ByteArray`, for example.
 So, I made my own implementation of the `AudioPlayer` interface.
-This approach made it possible to avoid intermediate saving of
+This approach makes it possible to avoid intermediate saving of
 audio data to a file, as well as to hot convert from WAV to MP3 using
 [Lame](https://lame.sourceforge.io/).
 
@@ -53,14 +53,13 @@ compilation, it will be placed in the Maven local repository (included in the
 `repositories` section in the `build.gradle.kts` file). Compilation instructions 
 and source codes can be found on the [Lame](https://lame.sourceforge.io/) website.
 
-The project is built after the dependency issues are resolved. For example:
-1) From command line (in project root directory)
+The project is built after the dependency issues are resolved. For example,
 
-
+from command line (in project root directory)
 
     # ./gradlew bootJar
 
-2) Manually run build task `bootJar` from IDE. 
+or manually run build task `bootJar` from IDE. 
 
 The compiled Jar is in `./build/libs/ConverterAPI-[version]-SNAPSHOT.jar`.
 
