@@ -69,7 +69,7 @@ Here:
 - [host] is the host where the project is running, [host] = `localhost` by 
 default.
 - [port] is the port. It can be changed in the `application.yaml` settings 
-file. [port] = `8080` by default.
+file. [port] = `8082` by default.
 
 Files conversion:
 
