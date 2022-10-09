@@ -2,9 +2,6 @@ package com.he1extg.converterapi.controller
 
 import com.he1extg.converterapi.converter.Converter
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.core.io.ByteArrayResource
-import org.springframework.core.io.Resource
-import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
@@ -39,7 +36,7 @@ class ConverterController {
             <div>Endpoints:</div>
             <div>1. URI - <a href=$fileApiUriStr>$fileApiUriStr</a></div>
             <div>Request: Method - POST; Content type - multipart/form-data; Body param - file: MultipartFile (only pdf)</div>
-            <div>Response: Content type - application/json; Return type - ByteArrayResource (mp3 byte array resource)</div>
+            <div>Response: Content type - application/json; Return type - ByteArray (mp3 byte array)</div>
             <div>2. URI - <a href=$textApiUriStr>$textApiUriStr</a></div>
             <div>Request: Method - POST; Content type - multipart/form-data; ; Body param - text: ByteArray (any text performed as byte array)</div>
             <div>Response: Content type - application/json; Return type - ByteArray (mp3 byte array)</div>
@@ -47,23 +44,15 @@ class ConverterController {
     }
 
     @PostMapping("/file")
-    fun convertFile(@RequestParam file: MultipartFile): ResponseEntity<Resource> {
+    fun convertFile(@RequestParam file: MultipartFile): ResponseEntity<ByteArray> {
         if (!file.isEmpty) {
-            val newFileName = if (file.originalFilename != null) {
-                file.originalFilename!!.substring(0, file.originalFilename!!.lastIndexOf(".")) + ".mp3"
-            } else {
-                "temp.mp3"
-            }
             val converted = converter.convert(file.inputStream)
-            val resource : Resource = object : ByteArrayResource(converted.readBytes()) {
-                override fun getFilename(): String = newFileName
-            }
-            return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "")
-                .body(resource)
+            return ResponseEntity
+                .ok()
+                .body(converted.readBytes())
         }
-        return ResponseEntity.noContent()
-            .header(HttpHeaders.CONTENT_DISPOSITION, "")
+        return ResponseEntity
+            .noContent()
             .build()
     }
 
@@ -71,12 +60,12 @@ class ConverterController {
     fun convertText(@RequestParam text: ByteArray): ResponseEntity<ByteArray> {
         if (text.isNotEmpty()) {
             val converted = converter.convert(text.decodeToString())
-            return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "")
+            return ResponseEntity
+                .ok()
                 .body(converted.readBytes())
         }
-        return ResponseEntity.noContent()
-            .header(HttpHeaders.CONTENT_DISPOSITION, "")
+        return ResponseEntity
+            .noContent()
             .build()
     }
 }

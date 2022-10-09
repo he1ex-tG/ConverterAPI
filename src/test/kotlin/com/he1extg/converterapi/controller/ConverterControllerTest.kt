@@ -28,12 +28,12 @@ internal class ConverterControllerTest {
                 }
             )
 
-        val answer = testRestTemplate.exchange(requestEntity, ByteArrayResource::class.java)
+        val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
 
         assertThat(answer.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(answer.body).isNotNull
         answer.body?.let {
-            assertThat(it.byteArray.decodeToString()).contains("LAME")
+            assertThat(it.decodeToString()).contains("LAME")
         }
     }
 

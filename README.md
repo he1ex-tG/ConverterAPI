@@ -25,7 +25,7 @@ endpoints that can be used by third party services:
 |------------|--------------|---------------------------------------------------------------------------------------------------------------|
 | GET        | /            | Get info                                                                                                      |
 | GET        | /api/v1      | Get API info (e.g. request method, content type, incoming data format and data type that returns in response) |
-| POST       | /api/v1/file | Convert pdf (only) file to mp3 byte array resource                                                            |
+| POST       | /api/v1/file | Convert pdf (only) file to mp3 byte array                                                                     |
 | POST       | /api/v1/text | Convert any text performed as byte array to mp3 byte array                                                    |
 
 ### 2. Converter
