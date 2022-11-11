@@ -34,12 +34,14 @@ Converting a PDF file into text (array of bytes) is made using the
 [ITextPDF](https://itextpdf.com/) library. Then the text is converted by 
 the [FreeTTS](https://freetts.sourceforge.io/) library.
 
-> __Note__. By default, FreeTTS does not provide the ability to
-output the audio stream as a `ByteArrayInputStream` or `ByteArray`, for example.
-So, I made my own implementation of the `AudioPlayer` interface.
-This approach makes it possible to avoid intermediate saving of
-audio data to a file, as well as to hot convert from WAV to MP3 using
-[Lame](https://lame.sourceforge.io/).
+> __Note__ 
+> 
+> By default, FreeTTS does not provide the ability to
+> output the audio stream as a `ByteArrayInputStream` or `ByteArray`, for example.
+> So, I made my own implementation of the `AudioPlayer` interface.
+> This approach makes it possible to avoid intermediate saving of
+> audio data to a file, as well as to hot convert from WAV to MP3 using
+> [Lame](https://lame.sourceforge.io/).
 
 ### 3. Tests
 
