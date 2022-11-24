@@ -21,10 +21,10 @@ internal class ConverterControllerTest {
     @Test
     fun convertFile() {
         val requestEntity = RequestEntity.post("/api/v1/file")
-            .contentType(MediaType.MULTIPART_FORM_DATA)
+            //.contentType(MediaType.MULTIPART_FORM_DATA)
             .body(
                 LinkedMultiValueMap<String, Any>().apply {
-                    add("file", FileSystemResource("E:/test.pdf"))
+                    add("file", FileSystemResource("E:/test.pdf").inputStream.readAllBytes())
                 }
             )
 
@@ -40,7 +40,6 @@ internal class ConverterControllerTest {
     @Test
     fun convertText() {
         val requestEntity = RequestEntity.post("/api/v1/text")
-            .contentType(MediaType.MULTIPART_FORM_DATA)
             .body(
                 LinkedMultiValueMap<String, Any>().apply {
                     add("text", "Hello World!")
