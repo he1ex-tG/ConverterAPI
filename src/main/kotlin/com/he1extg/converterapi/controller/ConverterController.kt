@@ -1,10 +1,10 @@
 package com.he1extg.converterapi.controller
 
 import com.he1extg.converterapi.converter.Converter
+import com.he1extg.converterapi.model.TransferData
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder
 import java.time.LocalDateTime
 
@@ -44,9 +44,11 @@ class ConverterController {
     }
 
     @PostMapping("/file")
-    fun convertFile(@RequestParam file: MultipartFile): ResponseEntity<ByteArray> {
-        if (!file.isEmpty) {
-            val converted = converter.convert(file.inputStream)
+    //fun convertFile(@RequestParam file: ByteArray): ResponseEntity<ByteArray> {
+    fun convertFile(@RequestBody data: ByteArray?): ResponseEntity<ByteArray> {
+        val file = data
+        if (file != null && file.isNotEmpty()) {
+            val converted = converter.convert(file.inputStream())
             return ResponseEntity
                 .ok()
                 .body(converted.readBytes())
@@ -57,8 +59,9 @@ class ConverterController {
     }
 
     @PostMapping("/text")
-    fun convertText(@RequestParam text: ByteArray): ResponseEntity<ByteArray> {
-        if (text.isNotEmpty()) {
+    fun convertText(@ModelAttribute(name = "data") transferData: TransferData): ResponseEntity<ByteArray> {
+        val text = transferData.dataa
+        if (text != null && text.isNotEmpty()) {
             val converted = converter.convert(text.decodeToString())
             return ResponseEntity
                 .ok()
