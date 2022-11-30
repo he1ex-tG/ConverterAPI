@@ -35,19 +35,23 @@ class ConverterController {
             <p></p>
             <div>Endpoints:</div>
             <div>1. URI - <a href=$fileApiUriStr>$fileApiUriStr</a></div>
-            <div>Request: Method - POST; Content type - multipart/form-data; Body param - file: MultipartFile (only pdf)</div>
+            <div>Request: Method - POST; Content type - application/json; Body - TransferData object with pdf (only!) file</div>
             <div>Response: Content type - application/json; Return type - ByteArray (mp3 byte array)</div>
             <div>2. URI - <a href=$textApiUriStr>$textApiUriStr</a></div>
-            <div>Request: Method - POST; Content type - multipart/form-data; ; Body param - text: ByteArray (any text performed as byte array)</div>
+            <div>Request: Method - POST; Content type - application/json; Body - TransferData object with any text performed as byte array</div>
             <div>Response: Content type - application/json; Return type - ByteArray (mp3 byte array)</div>
          """.trimIndent()
     }
 
     @PostMapping("/file")
-    //fun convertFile(@RequestParam file: ByteArray): ResponseEntity<ByteArray> {
-    fun convertFile(@RequestBody data: ByteArray?): ResponseEntity<ByteArray> {
-        val file = data
-        if (file != null && file.isNotEmpty()) {
+    fun convertFile(@RequestBody transferData: TransferData?): ResponseEntity<ByteArray> {
+        if (transferData?.content == null || transferData.content!!.size != transferData.length) {
+            return ResponseEntity
+                .badRequest()
+                .build()
+        }
+        val file = transferData.content!!
+        if (file.isNotEmpty()) {
             val converted = converter.convert(file.inputStream())
             return ResponseEntity
                 .ok()
@@ -59,10 +63,15 @@ class ConverterController {
     }
 
     @PostMapping("/text")
-    fun convertText(@ModelAttribute(name = "data") transferData: TransferData): ResponseEntity<ByteArray> {
-        val text = transferData.dataa
-        if (text != null && text.isNotEmpty()) {
-            val converted = converter.convert(text.decodeToString())
+    fun convertText(@RequestBody transferData: TransferData?): ResponseEntity<ByteArray> {
+        if (transferData?.content == null || transferData.content!!.size != transferData.length) {
+            return ResponseEntity
+                .badRequest()
+                .build()
+        }
+        val text = transferData.content!!.decodeToString()
+        if (text.isNotEmpty()) {
+            val converted = converter.convert(text)
             return ResponseEntity
                 .ok()
                 .body(converted.readBytes())
