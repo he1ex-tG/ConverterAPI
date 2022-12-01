@@ -28,6 +28,23 @@ endpoints that can be used by third party services:
 | POST       | /api/v1/file | Convert pdf (only) file to mp3 byte array                                                                     |
 | POST       | /api/v1/text | Convert any text performed as byte array to mp3 byte array                                                    |
 
+Content type of POST requests is `APPLICATION/JSON`. Request body is an instance of 
+class that extends `TransferData` interface:
+
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
+    interface TransferData {
+      val content: ByteArray?
+      val contentSize: Int
+    } 
+
+For example:
+
+    class TransferDataImpl : TransferData {
+      override var content: ByteArray? = null
+      override val contentSize: Int
+        get() = content?.size ?: 0
+    }
+
 ### 2. Converter
 
 Converting a PDF file into text (array of bytes) is made using the
@@ -77,13 +94,20 @@ Files conversion:
 
 
 
-    # curl -F file=@C:/hw.pdf -o C:/hw.mp3 http://[host]:[port]/api/v1/file
+    # curl -X POST -H "Content-type: application/json" -d @C:/hw.txt -o C:/hw.mp3 http://[host]:[port]/api/v1/file
 
 Text conversion:
 
+File `hw.txt`
 
+    {
+      "content": [72, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100, 33],
+      "contentSize": 12
+    }
 
-    # curl -d "text=Hello world!" -o C:/hw.mp3 http://[host]:[port]/api/v1/text
+Command
+
+    # curl -X POST -H "Content-type: application/json" -d @C:/hw.txt -o C:/hw.mp3 http://[host]:[port]/api/v1/text
 
 ## TODO
 
