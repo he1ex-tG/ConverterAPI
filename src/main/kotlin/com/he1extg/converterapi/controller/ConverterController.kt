@@ -45,7 +45,7 @@ class ConverterController {
 
     @PostMapping("/file")
     fun convertFile(@RequestBody transferData: TransferData?): ResponseEntity<ByteArray> {
-        if (transferData?.content == null || transferData.content!!.size != transferData.length) {
+        if (transferData?.content == null || transferData.content!!.size != transferData.contentSize) {
             return ResponseEntity
                 .badRequest()
                 .build()
@@ -64,7 +64,7 @@ class ConverterController {
 
     @PostMapping("/text")
     fun convertText(@RequestBody transferData: TransferData?): ResponseEntity<ByteArray> {
-        if (transferData?.content == null || transferData.content!!.size != transferData.length) {
+        if (transferData?.content == null || transferData.content!!.size != transferData.contentSize) {
             return ResponseEntity
                 .badRequest()
                 .build()

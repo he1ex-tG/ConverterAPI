@@ -1,6 +1,7 @@
 package com.he1extg.converterapi.controller
 
 import com.he1extg.converterapi.model.TransferData
+import com.he1extg.converterapi.model.TransferDataImpl
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,13 +18,13 @@ internal class ConverterControllerTest {
 
     @Test
     fun `convertFile normal data`() {
-        val transferData = TransferData().apply {
+        val transferDataImpl = TransferDataImpl().apply {
             content = FileSystemResource("E:/test.pdf").inputStream.readBytes()
         }
         val requestEntity = RequestEntity.post("/api/v1/file")
             .contentType(MediaType.APPLICATION_JSON)
             .body(
-                transferData
+                transferDataImpl
             )
 
         val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
@@ -37,13 +38,13 @@ internal class ConverterControllerTest {
 
     @Test
     fun `convertFile null file`() {
-        val transferData = TransferData().apply {
+        val transferDataImpl = TransferDataImpl().apply {
             content = null
         }
         val requestEntity = RequestEntity.post("/api/v1/file")
             .contentType(MediaType.APPLICATION_JSON)
             .body(
-                transferData
+                transferDataImpl
             )
 
         val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
@@ -53,13 +54,13 @@ internal class ConverterControllerTest {
 
     @Test
     fun `convertFile empty file`() {
-        val transferData = TransferData().apply {
+        val transferDataImpl = TransferDataImpl().apply {
             content = byteArrayOf()
         }
         val requestEntity = RequestEntity.post("/api/v1/file")
             .contentType(MediaType.APPLICATION_JSON)
             .body(
-                transferData
+                transferDataImpl
             )
 
         val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
@@ -69,14 +70,14 @@ internal class ConverterControllerTest {
 
     @Test
     fun `convertFile file size incorrect`() {
-        class TestTransferData {
-            var content: ByteArray? = null
-            var length: Int = 0
-        }
 
-        val transferData = TestTransferData().apply {
+        val transferData = object : TransferData {
+            override var content: ByteArray? = null
+            override var contentSize: Int = 0
+        }
+        transferData.apply {
             content = FileSystemResource("E:/test.pdf").inputStream.readBytes()
-            length = 100
+            contentSize = 100
         }
         val requestEntity = RequestEntity.post("/api/v1/file")
             .contentType(MediaType.APPLICATION_JSON)
@@ -91,13 +92,13 @@ internal class ConverterControllerTest {
 
     @Test
     fun `convertText normal data`() {
-        val transferData = TransferData().apply {
+        val transferDataImpl = TransferDataImpl().apply {
             content = "Hello world!".toByteArray()
         }
         val requestEntity = RequestEntity.post("/api/v1/text")
             .contentType(MediaType.APPLICATION_JSON)
             .body(
-                transferData
+                transferDataImpl
             )
 
         val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
@@ -111,13 +112,13 @@ internal class ConverterControllerTest {
 
     @Test
     fun `convertText null text`() {
-        val transferData = TransferData().apply {
+        val transferDataImpl = TransferDataImpl().apply {
             content = null
         }
         val requestEntity = RequestEntity.post("/api/v1/text")
             .contentType(MediaType.APPLICATION_JSON)
             .body(
-                transferData
+                transferDataImpl
             )
 
         val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
@@ -127,13 +128,13 @@ internal class ConverterControllerTest {
 
     @Test
     fun `convertText empty text`() {
-        val transferData = TransferData().apply {
+        val transferDataImpl = TransferDataImpl().apply {
             content = byteArrayOf()
         }
         val requestEntity = RequestEntity.post("/api/v1/text")
             .contentType(MediaType.APPLICATION_JSON)
             .body(
-                transferData
+                transferDataImpl
             )
 
         val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
@@ -143,15 +144,16 @@ internal class ConverterControllerTest {
 
     @Test
     fun `convertText text size incorrect`() {
-        class TestTransferData {
-            var content: ByteArray? = null
-            var length: Int = 0
+
+        val transferData = object : TransferData {
+            override var content: ByteArray? = null
+            override var contentSize: Int = 0
+        }
+        transferData.apply {
+            content = "Hello world!".toByteArray()
+            contentSize = 1
         }
 
-        val transferData = TestTransferData().apply {
-            content = "Hello world!".toByteArray()
-            length = 1
-        }
         val requestEntity = RequestEntity.post("/api/v1/text")
             .contentType(MediaType.APPLICATION_JSON)
             .body(
