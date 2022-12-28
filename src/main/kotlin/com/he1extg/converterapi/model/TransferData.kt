@@ -1,9 +1,7 @@
 package com.he1extg.converterapi.model
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo
-
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
-interface TransferData {
-    val content: ByteArray?
+class TransferData {
+    var content: ByteArray? = null
     val contentSize: Int
+        get() = content?.size ?: 0
 }
