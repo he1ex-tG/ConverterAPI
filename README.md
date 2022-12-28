@@ -28,20 +28,12 @@ endpoints that can be used by third party services:
 | POST       | /api/v1/file | Convert pdf (only) file to mp3 byte array                                                                     |
 | POST       | /api/v1/text | Convert any text performed as byte array to mp3 byte array                                                    |
 
-Content type of POST requests is `APPLICATION/JSON`. Request body is an instance of 
-class that implements `TransferData` interface:
+Content type of POST requests is `APPLICATION/JSON`. Request body is an instance of
+`TransferData` class:
 
-    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
-    interface TransferData {
-      val content: ByteArray?
+    class TransferData {
+      var content: ByteArray? = null
       val contentSize: Int
-    } 
-
-For example:
-
-    class TransferDataImpl : TransferData {
-      override var content: ByteArray? = null
-      override val contentSize: Int
         get() = content?.size ?: 0
     }
 
@@ -101,7 +93,6 @@ Text conversion:
 File `hw.txt`
 
     {
-      "@class": "com.he1extg.converterapi.model.TransferDataImpl",
       "content": [72, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100, 33],
       "contentSize": 12
     }
