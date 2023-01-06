@@ -52,6 +52,17 @@ internal class ConverterControllerTest {
     }
 
     @Test
+    fun `convertFile null transferData`() {
+        val requestEntity = RequestEntity.post("/api/v1/file")
+            .contentType(MediaType.APPLICATION_JSON)
+            .build()
+
+        val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
+
+        assertThat(answer.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
     fun `convertFile empty file`() {
         val transferData = TransferData().apply {
             content = byteArrayOf()
@@ -64,7 +75,7 @@ internal class ConverterControllerTest {
 
         val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
 
-        assertThat(answer.statusCode).isEqualTo(HttpStatus.NO_CONTENT)
+        assertThat(answer.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
     @Test
@@ -104,6 +115,17 @@ internal class ConverterControllerTest {
     }
 
     @Test
+    fun `convertText null transferData`() {
+        val requestEntity = RequestEntity.post("/api/v1/text")
+            .contentType(MediaType.APPLICATION_JSON)
+            .build()
+
+        val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
+
+        assertThat(answer.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
     fun `convertText empty text`() {
         val transferData = TransferData().apply {
             content = byteArrayOf()
@@ -116,7 +138,7 @@ internal class ConverterControllerTest {
 
         val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
 
-        assertThat(answer.statusCode).isEqualTo(HttpStatus.NO_CONTENT)
+        assertThat(answer.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
 }
