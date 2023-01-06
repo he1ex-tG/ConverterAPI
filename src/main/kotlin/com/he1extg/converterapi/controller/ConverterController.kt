@@ -43,41 +43,35 @@ class ConverterController {
          """.trimIndent()
     }
 
+    /**
+     * TODO Add validation
+     * TODO After that add exception handling (https://stackoverflow.com/questions/32441919/how-return-error-message-in-spring-mvc-controller)
+     */
     @PostMapping("/file")
     fun convertFile(@RequestBody transferData: TransferData?): ResponseEntity<ByteArray> {
-        if (transferData?.content == null || transferData.content!!.size != transferData.contentSize) {
-            return ResponseEntity
+        return try {
+            val conversionResult = converter.convert(transferData!!.content!!.inputStream()).readBytes()
+            ResponseEntity
+                .ok()
+                .body(conversionResult)
+        } catch (e: Exception) {
+            ResponseEntity
                 .badRequest()
                 .build()
         }
-        val file = transferData.content!!
-        if (file.isNotEmpty()) {
-            val converted = converter.convert(file.inputStream())
-            return ResponseEntity
-                .ok()
-                .body(converted.readBytes())
-        }
-        return ResponseEntity
-            .noContent()
-            .build()
     }
 
     @PostMapping("/text")
     fun convertText(@RequestBody transferData: TransferData?): ResponseEntity<ByteArray> {
-        if (transferData?.content == null || transferData.content!!.size != transferData.contentSize) {
-            return ResponseEntity
+        return try {
+            val conversionResult = converter.convert(transferData!!.content!!.decodeToString()).readBytes()
+            ResponseEntity
+                .ok()
+                .body(conversionResult)
+        } catch (e: Exception) {
+            ResponseEntity
                 .badRequest()
                 .build()
         }
-        val text = transferData.content!!.decodeToString()
-        if (text.isNotEmpty()) {
-            val converted = converter.convert(text)
-            return ResponseEntity
-                .ok()
-                .body(converted.readBytes())
-        }
-        return ResponseEntity
-            .noContent()
-            .build()
     }
 }

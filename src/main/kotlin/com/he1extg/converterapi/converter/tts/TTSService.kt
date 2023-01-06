@@ -36,6 +36,9 @@ class TTSService : TTS {
     }
 
     override fun stream(text: String): InputStream {
+        if (text.isEmpty()) {
+            throw Exception("No text passed to TTS for stream.")
+        }
         voice.audioPlayer = mp3StreamAudioPlayer
         voice.speak(text)
         return inputStream
