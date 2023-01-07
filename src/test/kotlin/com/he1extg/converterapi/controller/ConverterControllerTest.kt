@@ -17,9 +17,7 @@ internal class ConverterControllerTest {
 
     @Test
     fun `convertFile normal data`() {
-        val transferData = TransferData().apply {
-            content = FileSystemResource("E:/test.pdf").inputStream.readBytes()
-        }
+        val transferData = TransferData(FileSystemResource("E:/test.pdf").inputStream.readBytes())
         val requestEntity = RequestEntity.post("/api/v1/file")
             .contentType(MediaType.APPLICATION_JSON)
             .body(
@@ -37,17 +35,18 @@ internal class ConverterControllerTest {
 
     @Test
     fun `convertFile null file`() {
-        val transferData = TransferData().apply {
-            content = null
-        }
+        class MockTransferData(
+            val content: ByteArray?
+        )
+        val mockTransferData = MockTransferData(null)
         val requestEntity = RequestEntity.post("/api/v1/file")
             .contentType(MediaType.APPLICATION_JSON)
             .body(
-                transferData
+                mockTransferData
             )
 
         val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
-
+        println(answer.body?.decodeToString())
         assertThat(answer.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
@@ -64,9 +63,7 @@ internal class ConverterControllerTest {
 
     @Test
     fun `convertFile empty file`() {
-        val transferData = TransferData().apply {
-            content = byteArrayOf()
-        }
+        val transferData = TransferData(byteArrayOf())
         val requestEntity = RequestEntity.post("/api/v1/file")
             .contentType(MediaType.APPLICATION_JSON)
             .body(
@@ -80,9 +77,7 @@ internal class ConverterControllerTest {
 
     @Test
     fun `convertText normal data`() {
-        val transferData = TransferData().apply {
-            content = "Hello world!".toByteArray()
-        }
+        val transferData = TransferData("Hello world!".toByteArray())
         val requestEntity = RequestEntity.post("/api/v1/text")
             .contentType(MediaType.APPLICATION_JSON)
             .body(
@@ -100,13 +95,14 @@ internal class ConverterControllerTest {
 
     @Test
     fun `convertText null text`() {
-        val transferData = TransferData().apply {
-            content = null
-        }
+        class MockTransferData(
+            val content: ByteArray?
+        )
+        val mockTransferData = MockTransferData(null)
         val requestEntity = RequestEntity.post("/api/v1/text")
             .contentType(MediaType.APPLICATION_JSON)
             .body(
-                transferData
+                mockTransferData
             )
 
         val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
@@ -127,9 +123,7 @@ internal class ConverterControllerTest {
 
     @Test
     fun `convertText empty text`() {
-        val transferData = TransferData().apply {
-            content = byteArrayOf()
-        }
+        val transferData = TransferData(byteArrayOf())
         val requestEntity = RequestEntity.post("/api/v1/text")
             .contentType(MediaType.APPLICATION_JSON)
             .body(
