@@ -4,12 +4,17 @@ import com.he1extg.converterapi.converter.Converter
 import com.he1extg.converterapi.model.TransferData
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.Errors
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder
 import java.time.LocalDateTime
+import javax.validation.Valid
+import javax.validation.constraints.NotNull
 
 @RestController
 @RequestMapping("/api/v1")
+@Validated
 class ConverterController {
 
     @Autowired
@@ -48,7 +53,18 @@ class ConverterController {
      * TODO After that add exception handling (https://stackoverflow.com/questions/32441919/how-return-error-message-in-spring-mvc-controller)
      */
     @PostMapping("/file")
-    fun convertFile(@RequestBody transferData: TransferData?): ResponseEntity<ByteArray> {
+    fun convertFile(
+        @Valid
+        @NotNull(message = "Transfer Data object must not be null")
+        @RequestBody
+        transferData: TransferData?,
+        errors: Errors
+    ): ResponseEntity<Any> {
+        if (errors.hasErrors()) {
+            errors.allErrors.forEach {
+                println(it.toString())
+            }
+        }
         return try {
             val conversionResult = converter.convert(transferData!!.content!!.inputStream()).readBytes()
             ResponseEntity
@@ -57,12 +73,12 @@ class ConverterController {
         } catch (e: Exception) {
             ResponseEntity
                 .badRequest()
-                .build()
+                .body("ConverterAPI: Bad request!")
         }
     }
 
     @PostMapping("/text")
-    fun convertText(@RequestBody transferData: TransferData?): ResponseEntity<ByteArray> {
+    fun convertText(@RequestBody transferData: TransferData?): ResponseEntity<Any> {
         return try {
             val conversionResult = converter.convert(transferData!!.content!!.decodeToString()).readBytes()
             ResponseEntity
@@ -71,7 +87,7 @@ class ConverterController {
         } catch (e: Exception) {
             ResponseEntity
                 .badRequest()
-                .build()
+                .body("ConverterAPI: Bad request!")
         }
     }
 }
