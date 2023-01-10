@@ -5,30 +5,25 @@ import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-class ApiError private constructor() {
-
-    private var status: HttpStatus? = null
-    private val timestamp: String = DateTimeFormatter
+class ApiError(
+    val status: HttpStatus,
+    val message: String = "${MAIN_PREFIX}: Unexpected error",
+    val debugMessage: String = "${MAIN_PREFIX}: Empty debug message",
+) {
+    val timestamp: String = DateTimeFormatter
         .ofPattern("HH:mm:ss.SSSSSS dd.MM.yyyy")
         .withZone(ZoneOffset.UTC)
         .format(Instant.now())
-    private var message: String? = null
-    private var debugMessage: String? = null
-    private val subErrors: List<ApiSubError>? = null
+    val subErrors: List<ApiSubError>? = null
 
-    constructor(status: HttpStatus?) : this() {
-        this.status = status
-    }
-
-    constructor(status: HttpStatus?, ex: Throwable) : this() {
-        this.status = status
-        message = "Unexpected error"
+    constructor(status: HttpStatus, ex: Throwable) : this(
+        status = status,
         debugMessage = ex.localizedMessage
-    }
+    )
 
-    constructor(status: HttpStatus?, message: String?, ex: Throwable) : this() {
-        this.status = status
-        this.message = message
+    constructor(status: HttpStatus, message: String, ex: Throwable) : this(
+        status = status,
+        message = message,
         debugMessage = ex.localizedMessage
-    }
+    )
 }
