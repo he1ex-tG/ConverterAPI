@@ -1,5 +1,6 @@
 package com.he1extg.converterapi.controller
 
+import com.he1extg.converterapi.exception.MAIN_PREFIX
 import com.he1extg.converterapi.model.TransferData
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -14,6 +15,10 @@ internal class ConverterControllerTest {
 
     @Autowired
     lateinit var testRestTemplate: TestRestTemplate
+
+    /**
+     * File conversion tests
+     */
 
     @Test
     fun `convertFile normal data`() {
@@ -34,6 +39,24 @@ internal class ConverterControllerTest {
     }
 
     @Test
+    fun `convertFile input not pdf file`() {
+        val transferData = TransferData(FileSystemResource("E:/test.mp3").inputStream.readBytes())
+        val requestEntity = RequestEntity.post("/api/v1/file")
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(
+                transferData
+            )
+
+        val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
+
+        assertThat(answer.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+        assertThat(answer.body).isNotNull
+        answer.body?.let {
+            assertThat(it.decodeToString()).contains(MAIN_PREFIX)
+        }
+    }
+
+    @Test
     fun `convertFile null file`() {
         class MockTransferData(
             val content: ByteArray?
@@ -46,8 +69,12 @@ internal class ConverterControllerTest {
             )
 
         val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
-        println(answer.body?.decodeToString())
+
         assertThat(answer.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+        assertThat(answer.body).isNotNull
+        answer.body?.let {
+            assertThat(it.decodeToString()).contains(MAIN_PREFIX)
+        }
     }
 
     @Test
@@ -59,6 +86,10 @@ internal class ConverterControllerTest {
         val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
 
         assertThat(answer.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+        assertThat(answer.body).isNotNull
+        answer.body?.let {
+            assertThat(it.decodeToString()).contains(MAIN_PREFIX)
+        }
     }
 
     @Test
@@ -73,7 +104,15 @@ internal class ConverterControllerTest {
         val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
 
         assertThat(answer.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+        assertThat(answer.body).isNotNull
+        answer.body?.let {
+            assertThat(it.decodeToString()).contains(MAIN_PREFIX)
+        }
     }
+
+    /**
+     * Text conversion tests
+     */
 
     @Test
     fun `convertText normal data`() {
