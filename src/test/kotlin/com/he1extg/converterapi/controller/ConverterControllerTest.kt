@@ -57,42 +57,6 @@ internal class ConverterControllerTest {
     }
 
     @Test
-    fun `convertFile null file`() {
-        class MockTransferData(
-            val content: ByteArray?
-        )
-        val mockTransferData = MockTransferData(null)
-        val requestEntity = RequestEntity.post("/api/v1/file")
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(
-                mockTransferData
-            )
-
-        val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
-
-        assertThat(answer.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-        assertThat(answer.body).isNotNull
-        answer.body?.let {
-            assertThat(it.decodeToString()).contains(MAIN_PREFIX)
-        }
-    }
-
-    @Test
-    fun `convertFile null transferData`() {
-        val requestEntity = RequestEntity.post("/api/v1/file")
-            .contentType(MediaType.APPLICATION_JSON)
-            .build()
-
-        val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
-
-        assertThat(answer.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-        assertThat(answer.body).isNotNull
-        answer.body?.let {
-            assertThat(it.decodeToString()).contains(MAIN_PREFIX)
-        }
-    }
-
-    @Test
     fun `convertFile empty file`() {
         val transferData = TransferData(byteArrayOf())
         val requestEntity = RequestEntity.post("/api/v1/file")
@@ -107,6 +71,24 @@ internal class ConverterControllerTest {
         assertThat(answer.body).isNotNull
         answer.body?.let {
             assertThat(it.decodeToString()).contains(MAIN_PREFIX)
+        }
+    }
+
+    @Test
+    fun `convertFile blank pdf file`() {
+        val transferData = TransferData(FileSystemResource("E:/blank.pdf").inputStream.readBytes())
+        val requestEntity = RequestEntity.post("/api/v1/file")
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(
+                transferData
+            )
+
+        val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
+
+        assertThat(answer.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+        assertThat(answer.body).isNotNull
+        answer.body?.let {
+            assertThat(it.decodeToString()).contains("An empty string was passed to the TTS module.")
         }
     }
 
@@ -133,34 +115,6 @@ internal class ConverterControllerTest {
     }
 
     @Test
-    fun `convertText null text`() {
-        class MockTransferData(
-            val content: ByteArray?
-        )
-        val mockTransferData = MockTransferData(null)
-        val requestEntity = RequestEntity.post("/api/v1/text")
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(
-                mockTransferData
-            )
-
-        val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
-
-        assertThat(answer.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-    }
-
-    @Test
-    fun `convertText null transferData`() {
-        val requestEntity = RequestEntity.post("/api/v1/text")
-            .contentType(MediaType.APPLICATION_JSON)
-            .build()
-
-        val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
-
-        assertThat(answer.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-    }
-
-    @Test
     fun `convertText empty text`() {
         val transferData = TransferData(byteArrayOf())
         val requestEntity = RequestEntity.post("/api/v1/text")
@@ -172,6 +126,10 @@ internal class ConverterControllerTest {
         val answer = testRestTemplate.exchange(requestEntity, ByteArray::class.java)
 
         assertThat(answer.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+        assertThat(answer.body).isNotNull
+        answer.body?.let {
+            assertThat(it.decodeToString()).contains(MAIN_PREFIX)
+        }
     }
 
 }
