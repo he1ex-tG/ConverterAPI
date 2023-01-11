@@ -43,38 +43,19 @@ class ConverterController {
          """.trimIndent()
     }
 
-    /**
-     * TODO Add validation
-     * TODO After that add exception handling (https://stackoverflow.com/questions/32441919/how-return-error-message-in-spring-mvc-controller)
-     */
     @PostMapping("/file")
-    fun convertFile(
-        @RequestBody
-        transferData: TransferData
-    ): ResponseEntity<Any> {
-        return try {
-            val conversionResult = converter.convert(transferData.content.inputStream()).readBytes()
-            ResponseEntity
-                .ok()
-                .body(conversionResult)
-        } catch (e: Exception) {
-            ResponseEntity
-                .badRequest()
-                .body("ConverterAPI: Bad request!")
-        }
+    fun convertFile(@RequestBody transferData: TransferData): ResponseEntity<Any> {
+        val conversionResult = converter.convert(transferData.content.inputStream()).readBytes()
+        return ResponseEntity
+            .ok()
+            .body(conversionResult)
     }
 
     @PostMapping("/text")
-    fun convertText(@RequestBody transferData: TransferData?): ResponseEntity<Any> {
-        return try {
-            val conversionResult = converter.convert(transferData!!.content!!.decodeToString()).readBytes()
-            ResponseEntity
-                .ok()
-                .body(conversionResult)
-        } catch (e: Exception) {
-            ResponseEntity
-                .badRequest()
-                .body("ConverterAPI: Bad request!")
-        }
+    fun convertText(@RequestBody transferData: TransferData): ResponseEntity<Any> {
+        val conversionResult = converter.convert(transferData.content.decodeToString()).readBytes()
+        return ResponseEntity
+            .ok()
+            .body(conversionResult)
     }
 }
