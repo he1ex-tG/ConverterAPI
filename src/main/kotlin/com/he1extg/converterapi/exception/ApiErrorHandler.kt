@@ -17,6 +17,7 @@ class ApiErrorHandler : ResponseEntityExceptionHandler() {
      * ResponseEntity builder
      */
     private fun buildResponseEntity(apiError: ApiError): ResponseEntity<Any> {
+        println(apiError.message)
         return ResponseEntity(apiError, apiError.status)
     }
 
@@ -24,6 +25,14 @@ class ApiErrorHandler : ResponseEntityExceptionHandler() {
      * Default exception handlers
      */
 
+    /**
+     * Custom exception handlers
+     */
+    @ExceptionHandler(ConverterEmptyStringException::class)
+    fun handlerConverterEmptyStringException(ex: ConverterEmptyStringException): ResponseEntity<Any> {
+        val apiError = ApiError(HttpStatus.BAD_REQUEST, "${MAIN_PREFIX}: ${ex.message}", ex)
+        return buildResponseEntity(apiError)
+    }
 
     /**
      * ITextPDF module exception handlers
