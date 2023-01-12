@@ -15,6 +15,9 @@ class ConverterController {
     @Autowired
     lateinit var converter: Converter
 
+    /**
+     * TODO Create root info builder based on annotations and reflection
+     */
     @GetMapping
     fun root(): String {
         val fileApiUri = MvcUriComponentsBuilder.fromMethodName(
@@ -45,17 +48,17 @@ class ConverterController {
 
     @PostMapping("/file")
     fun convertFile(@RequestBody transferData: TransferData): ResponseEntity<Any> {
-        val conversionResult = converter.convert(transferData.content.inputStream()).readBytes()
+        val conversionResult = converter.convert(transferData.content.inputStream())
         return ResponseEntity
             .ok()
-            .body(conversionResult)
+            .body(conversionResult.readBytes())
     }
 
     @PostMapping("/text")
     fun convertText(@RequestBody transferData: TransferData): ResponseEntity<Any> {
-        val conversionResult = converter.convert(transferData.content.decodeToString()).readBytes()
+        val conversionResult = converter.convert(transferData.content.decodeToString())
         return ResponseEntity
             .ok()
-            .body(conversionResult)
+            .body(conversionResult.readBytes())
     }
 }

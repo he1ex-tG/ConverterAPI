@@ -1,6 +1,6 @@
 package com.he1extg.converterapi.converter.tts
 
-import com.he1extg.converterapi.exception.ConverterEmptyStringException
+import com.he1extg.converterapi.exception.TtsEmptyStringException
 import com.sun.speech.freetts.Voice
 import com.sun.speech.freetts.VoiceManager
 import com.sun.speech.freetts.audio.JavaStreamingAudioPlayer
@@ -38,7 +38,7 @@ class TTSService : TTS {
 
     override fun stream(text: String): InputStream {
         if (text.isEmpty()) {
-            throw ConverterEmptyStringException()
+            throw TtsEmptyStringException()
         }
         voice.audioPlayer = mp3StreamAudioPlayer
         voice.speak(text)
