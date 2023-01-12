@@ -1,6 +1,5 @@
 package com.he1extg.converterapi.controller
 
-import com.he1extg.converterapi.exception.MAIN_PREFIX
 import com.he1extg.converterapi.model.TransferData
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -21,7 +20,7 @@ internal class ConverterControllerTest {
      */
 
     @Test
-    fun `convertFile normal data`() {
+    fun `convertFile normal TransferData content - result ok`() {
         val transferData = TransferData(FileSystemResource("E:/test.pdf").inputStream.readBytes())
         val requestEntity = RequestEntity.post("/api/v1/file")
             .contentType(MediaType.APPLICATION_JSON)
@@ -39,7 +38,7 @@ internal class ConverterControllerTest {
     }
 
     @Test
-    fun `convertFile input not pdf file`() {
+    fun `convertFile TransferData content is not pdf file - result bad_request`() {
         val transferData = TransferData(FileSystemResource("E:/test.mp3").inputStream.readBytes())
         val requestEntity = RequestEntity.post("/api/v1/file")
             .contentType(MediaType.APPLICATION_JSON)
@@ -52,12 +51,12 @@ internal class ConverterControllerTest {
         assertThat(answer.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
         assertThat(answer.body).isNotNull
         answer.body?.let {
-            assertThat(it.decodeToString()).contains(MAIN_PREFIX)
+            assertThat(it.decodeToString()).contains("Converter")
         }
     }
 
     @Test
-    fun `convertFile empty file`() {
+    fun `convertFile empty TransferData content - result bad_request`() {
         val transferData = TransferData(byteArrayOf())
         val requestEntity = RequestEntity.post("/api/v1/file")
             .contentType(MediaType.APPLICATION_JSON)
@@ -70,12 +69,12 @@ internal class ConverterControllerTest {
         assertThat(answer.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
         assertThat(answer.body).isNotNull
         answer.body?.let {
-            assertThat(it.decodeToString()).contains(MAIN_PREFIX)
+            assertThat(it.decodeToString()).contains("Converter")
         }
     }
 
     @Test
-    fun `convertFile blank pdf file`() {
+    fun `convertFile normal TransferData content and blank pdf file - result bad_request`() {
         val transferData = TransferData(FileSystemResource("E:/blank.pdf").inputStream.readBytes())
         val requestEntity = RequestEntity.post("/api/v1/file")
             .contentType(MediaType.APPLICATION_JSON)
@@ -97,7 +96,7 @@ internal class ConverterControllerTest {
      */
 
     @Test
-    fun `convertText normal data`() {
+    fun `convertText normal TransferData content - result ok`() {
         val transferData = TransferData("Hello world!".toByteArray())
         val requestEntity = RequestEntity.post("/api/v1/text")
             .contentType(MediaType.APPLICATION_JSON)
@@ -115,7 +114,7 @@ internal class ConverterControllerTest {
     }
 
     @Test
-    fun `convertText empty text`() {
+    fun `convertText empty TransferData content - result bad_request`() {
         val transferData = TransferData(byteArrayOf())
         val requestEntity = RequestEntity.post("/api/v1/text")
             .contentType(MediaType.APPLICATION_JSON)
@@ -128,7 +127,7 @@ internal class ConverterControllerTest {
         assertThat(answer.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
         assertThat(answer.body).isNotNull
         answer.body?.let {
-            assertThat(it.decodeToString()).contains(MAIN_PREFIX)
+            assertThat(it.decodeToString()).contains("Converter")
         }
     }
 
