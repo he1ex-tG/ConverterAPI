@@ -8,7 +8,8 @@ systems.
 
 ## Note
 
-This is the part of [PDFReader](https://github.com/he1ex-tG/PDFReader) project.
+This is the internal microservice - the part of 
+[PDFReader](https://github.com/he1ex-tG/PDFReader) project.
 
 ## Structure
 
@@ -25,17 +26,21 @@ endpoints that can be used by third party services:
 |------------|--------------|---------------------------------------------------------------------------------------------------------------|
 | GET        | /            | Get info                                                                                                      |
 | GET        | /api/v1      | Get API info (e.g. request method, content type, incoming data format and data type that returns in response) |
-| POST       | /api/v1/file | Convert pdf (only) file to mp3 byte array                                                                     |
-| POST       | /api/v1/text | Convert any text performed as byte array to mp3 byte array                                                    |
+| POST       | /api/v1/file | Convert `TransferData` object to `ByteArray`                                                                  |
+| POST       | /api/v1/text | Convert `TransferData` object to `ByteArray`                                                                  |
 
 Content type of POST requests is `APPLICATION/JSON`. Request body is an instance of
-`TransferData` class:
+`TransferData` class
 
-    class TransferData {
-      var content: ByteArray? = null
+    class TransferData(
+      val content: ByteArray
+    ) {
       val contentSize: Int
-        get() = content?.size ?: 0
+        get() = content.size
     }
+
+where `content` filed is a PDF file or text in the form of `ByteArray` for file or text 
+conversion accordingly.
 
 ### 2. Converter
 
@@ -52,7 +57,23 @@ the [FreeTTS](https://freetts.sourceforge.io/) library.
 > audio data to a file, as well as to hot convert from WAV to MP3 using
 > [Lame](https://lame.sourceforge.io/).
 
-### 3. Tests
+### 3. Exception handling
+
+As mentioned above, ConverterAPI is an internal microservice, so it is assumed that the 
+correct data will be passed in the request body, i.e. not null `TransferData` object, 
+not blank `TransferData.content`, etc. However, errors may occur if `TransferData.content` 
+will contain a non-pdf file or empty string, for example. For such cases, exception handling 
+is provided by extending `ResponseEntityExceptionHandler` class, using of the 
+`@ControllerAdvice` and `@ExceptionHandler` annotations.
+
+The entire list of `ITextPDF` module exceptions (`BadPasswordException`, 
+`IllegalPdfSyntaxException`, `InvalidPdfException`, `UnsupportedPdfException`) and one
+custom exception (`TtsEmptyStringException`) are handled in the project.
+
+As a result of exception handling, the corresponding `RequestEntity` object is generated 
+and sent to the consumer.
+
+### 4. Tests
 
 Functional tests of both the API and the converter are located in `./src/test` 
 directory.
@@ -93,8 +114,7 @@ Text conversion:
 File `hw.txt`
 
     {
-      "content": [72, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100, 33],
-      "contentSize": 12
+      "content": [72, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100, 33]
     }
 
 Command
