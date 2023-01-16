@@ -26,8 +26,8 @@ endpoints that can be used by third party services:
 |------------|--------------|---------------------------------------------------------------------------------------------------------------|
 | GET        | /            | Get info                                                                                                      |
 | GET        | /api/v1      | Get API info (e.g. request method, content type, incoming data format and data type that returns in response) |
-| POST       | /api/v1/file | Convert `TransferData` object to `ByteArray`                                                                  |
-| POST       | /api/v1/text | Convert `TransferData` object to `ByteArray`                                                                  |
+| POST       | /api/v1/file | Convert `TransferData` object with content of PDF file to `TransferData` object with content of MP3           |
+| POST       | /api/v1/text | Convert `TransferData` object with content of plain text to `TransferData` object with content of MP3         |
 
 Content type of POST requests is `APPLICATION/JSON`. Request body is an instance of
 `TransferData` class
@@ -107,7 +107,7 @@ Files conversion:
 
 
 
-    # curl -X POST -H "Content-type: application/json" -d @C:/hw.txt -o C:/hw.mp3 http://[host]:[port]/api/v1/file
+    # curl -X POST -H "Content-type: application/json" -d @C:/hw.txt -o C:/hw.dto http://[host]:[port]/api/v1/file
 
 Text conversion:
 
@@ -119,7 +119,7 @@ File `hw.txt`
 
 Command
 
-    # curl -X POST -H "Content-type: application/json" -d @C:/hw.txt -o C:/hw.mp3 http://[host]:[port]/api/v1/text
+    # curl -X POST -H "Content-type: application/json" -d @C:/hw.txt -o C:/hw.dto http://[host]:[port]/api/v1/text
 
 ## TODO
 
