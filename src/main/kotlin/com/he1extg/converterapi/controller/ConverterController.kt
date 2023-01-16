@@ -1,7 +1,7 @@
 package com.he1extg.converterapi.controller
 
 import com.he1extg.converterapi.converter.Converter
-import com.he1extg.converterapi.model.TransferData
+import com.he1extg.converterapi.dto.FileConvertDTO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -47,18 +47,18 @@ class ConverterController {
     }
 
     @PostMapping("/file")
-    fun convertFile(@RequestBody transferData: TransferData): ResponseEntity<Any> {
-        val conversionResult = converter.convert(transferData.content.inputStream())
+    fun convertFile(@RequestBody fileConvertDTO: FileConvertDTO): ResponseEntity<Any> {
+        val conversionResult = converter.convert(fileConvertDTO.content.inputStream())
         return ResponseEntity
             .ok()
-            .body(conversionResult.readBytes())
+            .body(FileConvertDTO(conversionResult.readBytes()))
     }
 
     @PostMapping("/text")
-    fun convertText(@RequestBody transferData: TransferData): ResponseEntity<Any> {
-        val conversionResult = converter.convert(transferData.content.decodeToString())
+    fun convertText(@RequestBody fileConvertDTO: FileConvertDTO): ResponseEntity<Any> {
+        val conversionResult = converter.convert(fileConvertDTO.content.decodeToString())
         return ResponseEntity
             .ok()
-            .body(conversionResult.readBytes())
+            .body(FileConvertDTO(conversionResult.readBytes()))
     }
 }

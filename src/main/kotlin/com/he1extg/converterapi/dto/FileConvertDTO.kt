@@ -1,6 +1,6 @@
-package com.he1extg.converterapi.model
+package com.he1extg.converterapi.dto
 
-class TransferData(
+class FileConvertDTO(
     val content: ByteArray
 ) {
     val contentSize: Int
