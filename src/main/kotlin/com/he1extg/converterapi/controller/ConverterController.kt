@@ -47,7 +47,7 @@ class ConverterController {
     }
 
     @PostMapping("/file")
-    fun convertFile(@RequestBody fileConvertDTO: FileConvertDTO): ResponseEntity<Any> {
+    fun convertFile(@RequestBody fileConvertDTO: FileConvertDTO): ResponseEntity<FileConvertDTO> {
         val conversionResult = converter.convert(fileConvertDTO.content.inputStream())
         return ResponseEntity
             .ok()
@@ -55,7 +55,7 @@ class ConverterController {
     }
 
     @PostMapping("/text")
-    fun convertText(@RequestBody fileConvertDTO: FileConvertDTO): ResponseEntity<Any> {
+    fun convertText(@RequestBody fileConvertDTO: FileConvertDTO): ResponseEntity<FileConvertDTO> {
         val conversionResult = converter.convert(fileConvertDTO.content.decodeToString())
         return ResponseEntity
             .ok()
