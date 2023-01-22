@@ -1,6 +1,6 @@
 package com.he1extg.converterapi.controller
 
-import com.he1extg.converterapi.converter.Converter
+import com.he1extg.converterapi.converter.ConverterService
 import com.he1extg.converterapi.dto.FileConvertDTO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -13,7 +13,7 @@ import java.time.LocalDateTime
 class ConverterController {
 
     @Autowired
-    lateinit var converter: Converter
+    lateinit var converterService: ConverterService
 
     /**
      * TODO Create root info builder based on annotations and reflection
@@ -48,7 +48,7 @@ class ConverterController {
 
     @PostMapping("/file")
     fun convertFile(@RequestBody fileConvertDTO: FileConvertDTO): ResponseEntity<FileConvertDTO> {
-        val conversionResult = converter.convert(fileConvertDTO.content.inputStream())
+        val conversionResult = converterService.convert(fileConvertDTO.content.inputStream())
         return ResponseEntity
             .ok()
             .body(FileConvertDTO(conversionResult.readBytes()))
@@ -56,7 +56,7 @@ class ConverterController {
 
     @PostMapping("/text")
     fun convertText(@RequestBody fileConvertDTO: FileConvertDTO): ResponseEntity<FileConvertDTO> {
-        val conversionResult = converter.convert(fileConvertDTO.content.decodeToString())
+        val conversionResult = converterService.convert(fileConvertDTO.content.decodeToString())
         return ResponseEntity
             .ok()
             .body(FileConvertDTO(conversionResult.readBytes()))

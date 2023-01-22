@@ -11,7 +11,7 @@ import org.springframework.core.io.FileSystemResource
 import org.springframework.http.*
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-internal class ConverterControllerTest {
+internal class ConverterServiceControllerTest {
 
     @Autowired
     lateinit var testRestTemplate: TestRestTemplate
