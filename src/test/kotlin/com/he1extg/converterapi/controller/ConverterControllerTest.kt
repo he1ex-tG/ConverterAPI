@@ -52,7 +52,7 @@ internal class ConverterControllerTest {
         assertThat(answer.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
         assertThat(answer.body).isNotNull
         answer.body?.let {
-            assertThat(it.message).contains("Converter")
+            assertThat(it.message).contains("PDF")
             assertThat(it.debugMessage).isEqualTo("PDF header signature not found.")
         }
     }
@@ -71,7 +71,7 @@ internal class ConverterControllerTest {
         assertThat(answer.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
         assertThat(answer.body).isNotNull
         answer.body?.let {
-            assertThat(it.message).contains("Converter")
+            assertThat(it.message).contains("PDF")
             assertThat(it.debugMessage).isEqualTo("PDF header signature not found.")
         }
     }
@@ -90,7 +90,7 @@ internal class ConverterControllerTest {
         assertThat(answer.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
         assertThat(answer.body).isNotNull
         answer.body?.let {
-            assertThat(it.message).contains("Converter")
+            assertThat(it.message).contains("TTS")
             assertThat(it.debugMessage).isEqualTo("An empty string was passed to the TTS module.")
         }
     }
@@ -131,7 +131,7 @@ internal class ConverterControllerTest {
         assertThat(answer.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
         assertThat(answer.body).isNotNull
         answer.body?.let {
-            assertThat(it.message).contains("Converter")
+            assertThat(it.message).contains("TTS")
             assertThat(it.debugMessage).isEqualTo("An empty string was passed to the TTS module.")
         }
     }
