@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 
-private const val PREFIX_PROJECT_NAME = "ConverterAPI"
-
 @ControllerAdvice
 class ApiErrorHandler : ResponseEntityExceptionHandler() {
 
@@ -31,7 +29,7 @@ class ApiErrorHandler : ResponseEntityExceptionHandler() {
      */
     @ExceptionHandler(TtsEmptyStringException::class)
     fun handlerConverterEmptyStringException(ex: TtsEmptyStringException): ResponseEntity<ApiError> {
-        val apiError = ApiError(HttpStatus.BAD_REQUEST, "${PREFIX_PROJECT_NAME}: ${ex.message}", ex)
+        val apiError = ApiError(HttpStatus.BAD_REQUEST, ex.message, ex)
         return buildResponseEntity(apiError)
     }
 
@@ -40,25 +38,25 @@ class ApiErrorHandler : ResponseEntityExceptionHandler() {
      */
     @ExceptionHandler(BadPasswordException::class)
     fun handlerBadPasswordException(ex: BadPasswordException): ResponseEntity<ApiError> {
-        val apiError = ApiError(HttpStatus.BAD_REQUEST, "${PREFIX_PROJECT_NAME}: ${ex.message}", ex)
+        val apiError = ApiError(HttpStatus.BAD_REQUEST, ex.message ?: "PDF file exception.", ex)
         return buildResponseEntity(apiError)
     }
 
     @ExceptionHandler(IllegalPdfSyntaxException::class)
     fun handlerIllegalPdfSyntaxException(ex: IllegalPdfSyntaxException): ResponseEntity<ApiError> {
-        val apiError = ApiError(HttpStatus.BAD_REQUEST, "${PREFIX_PROJECT_NAME}: ${ex.message}", ex)
+        val apiError = ApiError(HttpStatus.BAD_REQUEST, ex.message ?: "PDF file exception.", ex)
         return buildResponseEntity(apiError)
     }
 
     @ExceptionHandler(InvalidPdfException::class)
     fun handlerInvalidPdfException(ex: InvalidPdfException): ResponseEntity<ApiError> {
-        val apiError = ApiError(HttpStatus.BAD_REQUEST, "${PREFIX_PROJECT_NAME}: ${ex.message}", ex)
+        val apiError = ApiError(HttpStatus.BAD_REQUEST, ex.message ?: "PDF file exception.", ex)
         return buildResponseEntity(apiError)
     }
 
     @ExceptionHandler(UnsupportedPdfException::class)
     fun handlerUnsupportedPdfException(ex: UnsupportedPdfException): ResponseEntity<ApiError> {
-        val apiError = ApiError(HttpStatus.BAD_REQUEST, "${PREFIX_PROJECT_NAME}: ${ex.message}", ex)
+        val apiError = ApiError(HttpStatus.BAD_REQUEST, ex.message ?: "PDF file exception.", ex)
         return buildResponseEntity(apiError)
     }
 }
